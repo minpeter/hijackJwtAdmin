@@ -1,0 +1,28 @@
+GET http://localhost:3000/public HTTP/1.1
+
+###
+GET http://localhost:3000/private HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjE2NjAzNjgsImlzQWRtaW4iOmZhbHNlLCJ1c2VyIGlkIjoyfQ.-aAjxR_7O8k_fEaKDgNwzA7Zjex-PSEAD6o7syDy-3g
+
+###
+POST http://localhost:3000/signup HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Emilia",
+  "email": "emilia@gmail.com",
+  "password": "123456"
+}
+
+###
+POST http://localhost:3000/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "emilia@gmail.com",
+  "password": "123456"
+}
+
+###
+GET http://localhost:3000/admin/flag HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjE2NjAzNjgsImlzQWRtaW4iOnRydWUsInVzZXIgaWQiOjJ9.jDf97jMjpRJQNOb8LiKbEbhEPzamFGx-qC8x_w_7Gsw
