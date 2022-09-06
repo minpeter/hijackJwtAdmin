@@ -1,9 +1,8 @@
 package data
 
 import (
-	"fmt"
-
-	_ "github.com/lib/pq"
+	// _ "github.com/lib/pq"
+	_ "modernc.org/sqlite"
 	"xorm.io/xorm"
 )
 
@@ -15,8 +14,10 @@ type User struct {
 }
 
 func CreateDBEngine() (*xorm.Engine, error) {
-	connectionInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", "localhost", 5432, "postgres", "qwer1234", "localAuth")
-	engine, err := xorm.NewEngine("postgres", connectionInfo)
+	// connectionInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", "localhost", 5432, "postgres", "qwer1234", "localAuth")
+	// engine, err := xorm.NewEngine("postgres", connectionInfo)
+	engine, err := xorm.NewEngine("sqlite", "./data.db")
+
 	if err != nil {
 		return nil, err
 	}

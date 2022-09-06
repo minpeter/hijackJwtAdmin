@@ -2,12 +2,16 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"os"
 	"time"
+
+	"github.com/minpeter/hijackJwtAdmin/data"
 
 	"github.com/gofiber/fiber/v2"
 	jwtWare "github.com/gofiber/jwt/v3"
 	"github.com/golang-jwt/jwt/v4"
-	"github.com/minpeter/localAuth/data"
+	"github.com/joho/godotenv"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -30,7 +34,40 @@ func main() {
 		panic(err)
 	}
 
-	app.Post("/signup", func(c *fiber.Ctx) error {
+	if err := godotenv.Load(".env"); err != nil {
+		log.Fatalf(".env file miss")
+	}
+
+	app.Get("/", func(c *fiber.Ctx) error {
+		return c.JSON(fiber.Map{
+			"msg": "This server is a JWT authentication server.",
+			"auth/signup": fiber.Map{
+				"method":  "POST",
+				"field":   []string{"name", "email", "password"},
+				"Explain": "Creating new users and requesting tokens",
+			},
+			"auth/login": fiber.Map{
+				"method":  "POST",
+				"field":   []string{"email", "password"},
+				"Explain": "Request for user token that has already been created",
+			},
+			"/private": fiber.Map{
+				"method":  "GET",
+				"Explain": "Private router that only logged in users can request",
+			},
+			"/public": fiber.Map{
+				"method":  "GET",
+				"Explain": "A public router that everyone can request",
+			},
+			"/admin/flag": fiber.Map{
+				"method":  "GET",
+				"Explain": "Catch Me If You Can",
+			},
+		})
+	})
+
+	auth := app.Group("/auth")
+	auth.Post("/signup", func(c *fiber.Ctx) error {
 		req := new(SignupRequest)
 		if err := c.BodyParser(req); err != nil {
 			return err
@@ -65,7 +102,7 @@ func main() {
 		return c.JSON(fiber.Map{"token": token, "exp": exp, "user": user})
 	})
 
-	app.Post("/login", func(c *fiber.Ctx) error {
+	auth.Post("/login", func(c *fiber.Ctx) error {
 		req := new(LoginRequest)
 		if err := c.BodyParser(req); err != nil {
 			return err
@@ -99,19 +136,19 @@ func main() {
 
 	admin := app.Group("/admin")
 	admin.Use(jwtWare.New(jwtWare.Config{
-		// SigningKey: []byte("MuSaSiN34au0"),
+		// SigningKey: []byte(os.Getenv("JWT_SECRET")),
 		KeyFunc: isAdmin(),
 	}))
 	admin.Get("/flag", func(c *fiber.Ctx) error {
-		return c.JSON(fiber.Map{"success": true, "path": "/flag", "flag": "dfc{4h1s_fl@g_1s_just_dummy_fl@g"})
+		return c.JSON(fiber.Map{"success": true, "path": "/flag", "flag": os.Getenv("FLAG")})
 	})
 
 	private := app.Group("/private")
 	private.Use(jwtWare.New(jwtWare.Config{
-		SigningKey: []byte("MuSaSiN34au0"),
+		SigningKey: []byte(os.Getenv("JWT_SECRET")),
 	}))
 	private.Get("/", func(c *fiber.Ctx) error {
-		return c.JSON(fiber.Map{"success": true, "path": "/private", "user": c.Locals("user"), "jwt": c.Locals("jwt")})
+		return c.JSON(fiber.Map{"success": true, "path": "/private", "user": c.Locals("user")})
 	})
 
 	public := app.Group("/public")
@@ -119,7 +156,7 @@ func main() {
 		return c.JSON(fiber.Map{"success": true, "path": "/public"})
 	})
 
-	if err := app.Listen(":3000"); err != nil {
+	if err := app.Listen(fmt.Sprintf(":%s", os.Getenv("BACKEND_PORT"))); err != nil {
 		panic(err)
 	}
 }
@@ -131,7 +168,7 @@ func createJWTToken(user data.User) (string, int64, error) {
 	claims["user id"] = user.Id
 	claims["exp"] = exp
 	claims["isAdmin"] = false
-	t, err := token.SignedString([]byte("MuSaSiN34au0"))
+	t, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
 	if err != nil {
 		return "", 0, err
 	}
@@ -143,6 +180,6 @@ func isAdmin() jwt.Keyfunc {
 		if !token.Claims.(jwt.MapClaims)["isAdmin"].(bool) {
 			return nil, fmt.Errorf("not admin")
 		}
-		return []byte("MuSaSiN34au0"), nil
+		return []byte(os.Getenv("JWT_SECRET")), nil
 	}
 }
