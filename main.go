@@ -9,6 +9,7 @@ import (
 	"github.com/minpeter/hijackJwtAdmin/data"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	jwtWare "github.com/gofiber/jwt/v3"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/joho/godotenv"
@@ -28,6 +29,15 @@ type LoginRequest struct {
 
 func main() {
 	app := fiber.New()
+
+	// Default config
+	app.Use(cors.New())
+
+	// Or extend your config for customization
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: "*",
+		AllowMethods: "GET,POST",
+	}))
 
 	engine, err := data.CreateDBEngine()
 	if err != nil {
