@@ -44,9 +44,13 @@ func main() {
 		panic(err)
 	}
 
-	if err := godotenv.Load(".env"); err != nil {
-		log.Fatalf(".env file miss")
+	if err := godotenv.Load("local.env"); err != nil {
+		log.Print("local.env file miss\nsearch production.env")
 	}
+	if err := godotenv.Load("production.env"); err != nil {
+		log.Fatal("production.env file miss\nplease create local.env file")
+	}
+	log.Print("env loaded")
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{

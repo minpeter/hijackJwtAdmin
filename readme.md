@@ -10,7 +10,7 @@ docker build -t minpeter/hijackjwtadmin .
 
 ## run docker images
 ```
-docker run --rm -p 3000:3000 minpeter/hijackjwtadmin
+docker run --rm -p 4000:4000 minpeter/hijackjwtadmin
 ```
 
 ## 유출된 wordlist 생성 방법
@@ -20,7 +20,7 @@ crunch 8 8 qwertyuiopasdfghjklzxcvbnm0987654321 -t cr34m@@@ -o ./wordlist.txt
 
 
 ## 주의사항
-문제 파일 배포할때 꼭 .env 파일을 제거하고 압축하여 배포하세요!!  
+문제 파일 배포할때 꼭 production.env, solution.md 파일을 제거하고 압축하여 배포하세요!!  
 
 ## 참고사항
 문제에서 유출된 패스워드 리스트는 용량상의 문제로 업로드하지 않았습니다.  
