@@ -11,7 +11,7 @@ RUN go mod download
 
 COPY *.go ./
 COPY data/data.go ./data/
-COPY .env.* ./
+COPY *.env ./
 
 RUN go build
 
