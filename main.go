@@ -45,10 +45,10 @@ func main() {
 	}
 
 	if err := godotenv.Load("local.env"); err != nil {
-		log.Print("local.env file miss\nsearch production.env")
+		log.Print("local.env file miss, but it's ok")
 	}
 	if err := godotenv.Load("production.env"); err != nil {
-		log.Print("production.env file miss\nplease create .env file")
+		log.Print("production.env file miss, but it's ok")
 	}
 	if temp := os.Getenv("JWT_SECRET"); temp == "" {
 		log.Fatal("JWT_SECRET is empty\nplease set JWT_SECRET in local.env or production.env")
