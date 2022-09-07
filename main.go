@@ -48,9 +48,11 @@ func main() {
 		log.Print("local.env file miss\nsearch production.env")
 	}
 	if err := godotenv.Load("production.env"); err != nil {
-		log.Fatal("production.env file miss\nplease create local.env file")
+		log.Print("production.env file miss\nplease create .env file")
 	}
-	log.Print("env loaded")
+	if temp := os.Getenv("JWT_SECRET"); temp == "" {
+		log.Fatal("JWT_SECRET is empty\nplease set JWT_SECRET in local.env or production.env")
+	}
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{
