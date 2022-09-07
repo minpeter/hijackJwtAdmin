@@ -164,7 +164,7 @@ func main() {
 		SigningKey: []byte(os.Getenv("JWT_SECRET")),
 	}))
 	private.Get("/", func(c *fiber.Ctx) error {
-		return c.JSON(fiber.Map{"success": true, "path": "/private", "user": c.Locals("user")})
+		return c.JSON(fiber.Map{"success": true, "path": "/private"})
 	})
 
 	public := app.Group("/public")

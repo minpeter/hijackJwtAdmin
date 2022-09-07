@@ -15,6 +15,7 @@ docker run --rm -p 4000:4000 minpeter/hijackjwtadmin
 ## 유출된 wordlist 생성 방법
 ```
 crunch 8 8 qwertyuiopasdfghjklzxcvbnm0987654321 -t cr34m@@@ -o ./wordlist.txt
+crunch 8 8 qwertyuiopasdfghjklzxcvbnm0987654321 -t abcde@@@ -o ./local.wordlist.txt
 ```
 
 ## 주의사항
