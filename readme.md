@@ -1,11 +1,10 @@
-## start backend server
-```
-go run .
-```
-
-## build docker image
+## build or pull docker image
 ```
 docker build -t minpeter/hijackjwtadmin .
+
+or
+
+docker pull minpeter/hijackjwtadmin
 ```
 
 ## run docker images
@@ -17,7 +16,6 @@ docker run --rm -p 4000:4000 minpeter/hijackjwtadmin
 ```
 crunch 8 8 qwertyuiopasdfghjklzxcvbnm0987654321 -t cr34m@@@ -o ./wordlist.txt
 ```
-
 
 ## 주의사항
 문제 파일 배포할때 꼭 production.env, solution.md 파일을 제거하고 압축하여 배포하세요!!  
