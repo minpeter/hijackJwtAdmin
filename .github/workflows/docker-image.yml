@@ -27,3 +27,5 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/hijack-jwt-admin:latest
+          cache-from: type=gha
+          cache-to: type=gha, mode=max
